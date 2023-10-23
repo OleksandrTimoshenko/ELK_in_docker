@@ -1,0 +1,5 @@
+cluster.name: "elk"
+network.host: 0.0.0.0 # setup into container
+
+xpack.security.enabled: true # cluster security
+xpack.license.self_generated.type: basic
