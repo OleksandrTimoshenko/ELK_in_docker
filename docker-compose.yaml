@@ -8,9 +8,9 @@ services:
       - ./docker_volumes/elasticsearch/data:/var/lib/elasticsearch/data
     environment:
       ES_JAVA_OPTS: "-Xmx512m -Xms512m"
-      ELASTIC_USERNAME: "elastic"
-      ELASTIC_PASSWORD: "MyPw123"
       discovery.type: single-node
+    env_file:
+      - .env
     networks:
       - elk
     ports:
@@ -25,6 +25,8 @@ services:
       - ${PWD}/configs/logstash/pipelines:/usr/share/logstash/config/pipelines
     environment:
       LS_JAVA_OPTS: "-Xmx512m -Xms512m"
+    env_file:
+      - .env
     ports:
       - "5044:5044"
       - "5000:5000"
@@ -40,6 +42,10 @@ services:
       - elasticsearch
     volumes:
       - ${PWD}/configs/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+    environment:
+      ES_JAVA_OPTS: "-Xmx512m -Xms512m"
+    env_file:
+      - .env
 
     networks:
       - elk
