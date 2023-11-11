@@ -2,20 +2,28 @@ version: '3.7'
 
 services:
   elasticsearch:
-    image: elasticsearch:7.16.1
+    image: elasticsearch:8.11.0
     volumes:
       - ${PWD}/configs/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      - ./docker_volumes/elasticsearch/data:/var/lib/elasticsearch/data
+      # TODO: check volumes path in container and add volumes
+      #- ./docker_volumes/elasticsearch/lib:/var/lib/elasticsearch
+      #- ./docker_volumes/elasticsearch/log:/var/log/elasticsearch
     environment:
-      ES_JAVA_OPTS: "-Xmx512m -Xms512m"
+      ES_PATH_CONF: /usr/share/elasticsearch/config/
+      xpack.security.enabled: true
       discovery.type: single-node
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    mem_limit: 8g
     env_file:
       - .env
     networks:
       - elk
 
   logstash:
-    image: logstash:7.16.2
+    image: logstash:8.11.0
     volumes:
       - ${PWD}/configs/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
       - ${PWD}/configs/logstash/pipelines.yml:/usr/share/logstash/config/pipelines.yml
@@ -30,7 +38,7 @@ services:
       - elasticsearch
 
   kibana:
-    image: kibana:7.16.1
+    image: kibana:8.11.0
     depends_on:
       - elasticsearch
     volumes:
