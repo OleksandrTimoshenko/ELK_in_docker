@@ -2,12 +2,11 @@ version: '3.7'
 
 services:
   elasticsearch:
+    container_name: elasticsearch
     image: elasticsearch:8.11.0
     volumes:
       - ${PWD}/configs/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      # TODO: check volumes path in container and add volumes
-      #- ./docker_volumes/elasticsearch/lib:/var/lib/elasticsearch
-      #- ./docker_volumes/elasticsearch/log:/var/log/elasticsearch
+      - elastic:/usr/share/elasticsearch/data/
     environment:
       ES_PATH_CONF: /usr/share/elasticsearch/config/
       xpack.security.enabled: true
@@ -23,6 +22,7 @@ services:
       - elk
 
   logstash:
+    container_name: logstash
     image: logstash:8.11.0
     volumes:
       - ${PWD}/configs/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
@@ -36,6 +36,7 @@ services:
       - elasticsearch
 
   kibana:
+    container_name: kibana
     image: kibana:8.11.0
     depends_on:
       - elasticsearch
@@ -47,6 +48,7 @@ services:
       - elk
 
   beats:
+    container_name: beats
     image: elastic/filebeat:8.11.0
     volumes:
       - ${PWD}/configs/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml
@@ -57,6 +59,7 @@ services:
       - elasticsearch
 
   nginx:
+    container_name: nginx
     image: nginx:1.25.3
     volumes:
       - ${PWD}/nginx/kibana.conf:/etc/nginx/conf.d/default.conf
@@ -69,3 +72,6 @@ services:
 
 networks:
   elk:
+
+volumes:
+  elastic:
