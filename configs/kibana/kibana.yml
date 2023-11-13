@@ -4,5 +4,5 @@ server.publicBaseUrl: "http://localhost:5601"
 monitoring.ui.container.elasticsearch.enabled: true # Elasticsearch in container setup
 
 elasticsearch.hosts: [ "http://elasticsearch:9200" ]
-elasticsearch.username: ${ELASTIC_USERNAME}
-elasticsearch.password: ${ELASTIC_PASSWORD}
+elasticsearch.username: ${KIBANA_USERNAME}
+elasticsearch.password: ${KIBANA_PASSWORD}

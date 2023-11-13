@@ -7,7 +7,7 @@ import psutil
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-while True:
+def logger():
     load1, load5, load15 = psutil.getloadavg()
     ram_usage_percent = psutil.virtual_memory().percent
 
@@ -23,5 +23,8 @@ while True:
 
     with open(os.path.join(BASE_DIR, 'host_metrics_app.log'), 'a') as f:
         f.write(json.dumps(log) + '\n')
-
     sleep(7)
+
+if __name__ == "__main__":
+    while True:
+        logger()
